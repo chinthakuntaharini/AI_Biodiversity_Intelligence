@@ -11,6 +11,55 @@
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
+    <!-- ═══════════════════════════════════════════════════════════════════
+         ECOLOGICAL BIOSPHERE UNIVERSE PORTAL (Astra-style Opening Animation)
+         ═══════════════════════════════════════════════════════════════════ -->
+    <div id="universe-portal" class="universe-portal" onclick="dismissUniversePortal()">
+        <div class="universe-bg-canvas">
+            <div class="cosmic-grid"></div>
+            <div class="cosmic-nebula nebula-terracotta"></div>
+            <div class="cosmic-nebula nebula-green"></div>
+            <div class="cosmic-nebula nebula-loam"></div>
+        </div>
+
+        <div class="universe-core-container">
+            <!-- 3D Gyroscopic Ecological Planetary Nexus -->
+            <div class="orbital-nexus-3d">
+                <div class="nexus-ring ring-atmosphere">
+                    <div class="orbital-node node-atmosphere"></div>
+                </div>
+                <div class="nexus-ring ring-carbon">
+                    <div class="orbital-node node-carbon"></div>
+                </div>
+                <div class="nexus-ring ring-biosphere">
+                    <div class="orbital-node node-biosphere"></div>
+                </div>
+                <div class="nexus-planetary-seed">
+                    <div class="seed-aura"></div>
+                    <div class="seed-core"></div>
+                </div>
+            </div>
+
+            <!-- Cinematic Brand Heading & Sequence Loader -->
+            <div class="universe-meta">
+                <div class="universe-tag">ECOLOGICAL INTELLIGENCE · BIOSPHERE NEXUS</div>
+                <h1 class="universe-title">DARUKAA.EARTH</h1>
+                <div class="universe-progress-track">
+                    <div class="universe-progress-bar" id="universe-progress-bar"></div>
+                </div>
+                <div class="universe-status-line" id="universe-status-line">
+                    INITIALISING ECOLOGICAL NEXUS · GROUNDING FAO & IPCC AR6 CORPUS
+                </div>
+                <button class="universe-skip-btn" onclick="dismissUniversePortal(); event.stopPropagation();">
+                    <span>ENTER PLATFORM</span>
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Ambient background layers -->
     <div class="ambient-layer">
         <div class="orb orb-1"></div>
@@ -251,28 +300,51 @@
 
                                     <div class="capability-grid">
                                         <div class="capability-item">
-                                            <div class="cap-icon">🌱</div>
+                                            <div class="cap-icon">
+                                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10S2 17.523 2 12A10 10 0 0 1 12 2z"/>
+                                                    <path d="M12 12c-2-3-1-6 2-8 3 3 2 6-2 8z"/>
+                                                    <path d="M12 12v8"/>
+                                                </svg>
+                                            </div>
                                             <div class="cap-text">
                                                 <strong>Scientific RAG</strong>
                                                 BM25 retrieval over FAO, IPCC AR6, IPBES & USDA-NRCS
                                             </div>
                                         </div>
                                         <div class="capability-item">
-                                            <div class="cap-icon">🔗</div>
+                                            <div class="cap-icon">
+                                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                                                </svg>
+                                            </div>
                                             <div class="cap-text">
                                                 <strong>Multi-Metric Nexus</strong>
                                                 Soil ↔ Hydrology ↔ Biodiversity ↔ Land Use causal chains
                                             </div>
                                         </div>
                                         <div class="capability-item">
-                                            <div class="cap-icon">🗺️</div>
+                                            <div class="cap-icon">
+                                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <circle cx="12" cy="12" r="10"/>
+                                                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+                                                    <path d="M2 12h20"/>
+                                                </svg>
+                                            </div>
                                             <div class="cap-text">
                                                 <strong>Spatial Enrichment</strong>
                                                 Biome resolution from lat/lon coordinates
                                             </div>
                                         </div>
                                         <div class="capability-item">
-                                            <div class="cap-icon">📋</div>
+                                            <div class="cap-icon">
+                                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                                                    <path d="M9 14l2 2 4-4"/>
+                                                </svg>
+                                            </div>
                                             <div class="cap-text">
                                                 <strong>Intake Protocol</strong>
                                                 Systematic clarification of missing parameters
@@ -377,7 +449,13 @@
 
                         <div class="form-section">
                             <div class="form-section-title">
-                                <span class="form-section-icon">🌍</span>
+                                <span class="form-section-icon">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="9"/>
+                                        <path d="M3.6 9h16.8M3.6 15h16.8"/>
+                                        <path d="M11.5 3a17 17 0 0 0 0 18M12.5 3a17 17 0 0 1 0 18"/>
+                                    </svg>
+                                </span>
                                 Soil Parameters
                             </div>
                             <div class="form-row-2">
@@ -419,7 +497,11 @@
 
                         <div class="form-section">
                             <div class="form-section-title">
-                                <span class="form-section-icon">💧</span>
+                                <span class="form-section-icon">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                                    </svg>
+                                </span>
                                 Hydrology & Climate
                             </div>
                             <div class="form-row-2">
@@ -453,7 +535,11 @@
 
                         <div class="form-section">
                             <div class="form-section-title">
-                                <span class="form-section-icon">🌾</span>
+                                <span class="form-section-icon">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                    </svg>
+                                </span>
                                 Vegetation & Land Use
                             </div>
                             <div class="form-row-2">
@@ -485,7 +571,12 @@
                     <!-- Right: Results -->
                     <div class="matrix-results-card" id="matrix-results">
                         <div class="empty-state">
-                            <div class="empty-icon">🔬</div>
+                            <div class="empty-icon">
+                                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 6v6l4 2"/>
+                                </svg>
+                            </div>
                             <h3>Awaiting Ecological Diagnosis</h3>
                             <p>Configure the environmental parameter matrix and execute diagnosis to observe coupled nexus modelling and evidence-backed prescriptions.</p>
                         </div>

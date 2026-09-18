@@ -161,9 +161,8 @@ class ReasoningEngine:
             "─" * 72,
         ]
         for dimension, level in risk.items():
-            symbol = {"CRITICAL": "🔴", "HIGH": "🟠", "MODERATE": "🟡",
-                      "LOW": "🟢", "UNKNOWN": "⬜"}.get(level, "•")
-            lines.append(f"  {symbol}  {dimension.replace('_', ' ').title():30s}  {level}")
+            tag = f"[{level}]"
+            lines.append(f"  {tag:12s}  {dimension.replace('_', ' ').title():28s}  {level}")
         lines.append("")
 
         # Nexus

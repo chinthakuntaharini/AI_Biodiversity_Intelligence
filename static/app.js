@@ -20,11 +20,108 @@ let sessionAccumulatedState = {};
 // Initialization
 // ──────────────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+    initUniversePortal();
     updateSessionDisplay();
     loadCorpusStats();
     resolveSpatial();         // pre-load default spatial result
     searchKB();               // pre-load default knowledge results
 });
+
+function initUniversePortal() {
+    const portal = document.getElementById('universe-portal');
+    const bar = document.getElementById('universe-progress-bar');
+    const statusLine = document.getElementById('universe-status-line');
+    if (!portal) return;
+
+    const steps = [
+        { progress: 28,  text: 'CALIBRATING MULTI-DIMENSIONAL BIO-GEOCHEMICAL NEXUS' },
+        { progress: 60,  text: 'GROUNDING SOIL ORGANIC CARBON & COMPACTION TRANSFER FUNCTIONS' },
+        { progress: 88,  text: 'INDEXING FAO, IPCC AR6 & IPBES LITERATURE CORPUS' },
+        { progress: 100, text: 'SCIENTIFIC LABORATORY ENVIRONMENT SYNCHRONISED' },
+    ];
+
+    let stepIdx = 0;
+    const interval = setInterval(() => {
+        if (stepIdx < steps.length) {
+            if (bar) bar.style.width = steps[stepIdx].progress + '%';
+            if (statusLine) statusLine.textContent = steps[stepIdx].text;
+            stepIdx++;
+        } else {
+            clearInterval(interval);
+            setTimeout(() => {
+                dismissUniversePortal();
+            }, 300);
+        }
+    }, 400);
+
+    // Auto-dismiss after 2.4s
+    setTimeout(() => {
+        dismissUniversePortal();
+    }, 2400);
+}
+
+function dismissUniversePortal() {
+    const portal = document.getElementById('universe-portal');
+    if (!portal || portal.dataset.dismissed === 'true') return;
+    portal.dataset.dismissed = 'true';
+    portal.classList.add('portal-zoom-out');
+    setTimeout(() => {
+        portal.style.display = 'none';
+    }, 850);
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+// Biosphere Reasoning Loader (Astra-style Scientific Loading Animation)
+// ──────────────────────────────────────────────────────────────────────────────
+let activeLoaderTimer = null;
+
+function createBiosphereLoader(title = 'ECOLOGICAL REASONING CORE ACTIVE') {
+    return `
+        <div class="biosphere-loader">
+            <div class="bio-gyro-rings">
+                <div class="bio-gyro-ring ring-atmosphere"></div>
+                <div class="bio-gyro-ring ring-carbon"></div>
+                <div class="bio-gyro-ring ring-biosphere"></div>
+                <div class="bio-gyro-core"></div>
+            </div>
+            <div class="bio-loader-content">
+                <div class="bio-loader-title">${escapeHtml(title)}</div>
+                <div class="bio-loader-phase" id="bio-loader-phase">Ingesting multi-dimensional soil & climate parameters...</div>
+                <div class="bio-loader-subtext">Coupled transfer functions · FAO, IPCC AR6 & IPBES corpus grounding</div>
+            </div>
+        </div>
+    `;
+}
+
+function startLoaderPhaseCycler(containerId = 'bio-loader-phase') {
+    if (activeLoaderTimer) clearInterval(activeLoaderTimer);
+    const phases = [
+        'Ingesting multi-dimensional soil & climate parameters...',
+        'Resolving Soil Organic Carbon & bulk density compaction...',
+        'Evaluating Hydrology <-> Soil <-> Biodiversity feedback loops...',
+        'Cross-referencing FAO, IPCC AR6 & IPBES literature corpus...',
+        'Formulating evidence-backed ecological restoration prescriptions...',
+    ];
+    let idx = 0;
+    activeLoaderTimer = setInterval(() => {
+        idx = (idx + 1) % phases.length;
+        const el = document.getElementById(containerId);
+        if (el) {
+            el.style.opacity = '0';
+            setTimeout(() => {
+                el.textContent = phases[idx];
+                el.style.opacity = '1';
+            }, 150);
+        }
+    }, 750);
+}
+
+function stopLoaderPhaseCycler() {
+    if (activeLoaderTimer) {
+        clearInterval(activeLoaderTimer);
+        activeLoaderTimer = null;
+    }
+}
 
 function generateSessionId() {
     return 'DS-' + Math.random().toString(36).substring(2, 6).toUpperCase() + '-' + Date.now().toString(36).toUpperCase().slice(-4);
@@ -121,12 +218,8 @@ async function submitIntake(overrideText = null) {
 
     // Loading indicator
     const loadingId = 'loading-' + Date.now();
-    appendStreamCard('loading', `
-        <div class="loading-spinner">
-            <div class="spinner"></div>
-            <span>Querying scientific knowledge base and evaluating multi-metric transfer functions…</span>
-        </div>
-    `, stream, loadingId);
+    appendStreamCard('loading', createBiosphereLoader('ECOLOGICAL REASONING CORE ACTIVE'), stream, loadingId);
+    startLoaderPhaseCycler('bio-loader-phase');
 
     // Disable submit
     const submitBtn = document.getElementById('intake-submit-btn');
@@ -161,7 +254,11 @@ async function submitIntake(overrideText = null) {
         } else {
             appendClarificationCard(data, stream);
         }
+        // Re-enable submit
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Assess'; }
+        stopLoaderPhaseCycler();
     } catch (err) {
+        stopLoaderPhaseCycler();
         const loadEl = document.getElementById(loadingId);
         if (loadEl) loadEl.remove();
         appendStreamCard('system', `
@@ -396,7 +493,7 @@ function updateDimRow(rowId, isPresent) {
     if (!dot || !status) return;
 
     dot.className    = 'dim-dot ' + (isPresent ? 'present' : 'missing');
-    status.textContent = isPresent ? '✓ Present' : '✗ Missing';
+    status.textContent = isPresent ? 'Present' : 'Missing';
     status.style.color = isPresent ? 'var(--green)' : 'var(--amber)';
 }
 
@@ -407,12 +504,8 @@ async function runMatrixAnalysis() {
     const payload = buildMatrixPayload();
     const container = document.getElementById('matrix-results');
 
-    container.innerHTML = `
-        <div class="loading-spinner" style="padding:40px;justify-content:center;">
-            <div class="spinner"></div>
-            <span>Executing multi-metric ecological diagnosis…</span>
-        </div>
-    `;
+    container.innerHTML = createBiosphereLoader('MULTI-VARIABLE MATRIX DIAGNOSIS ACTIVE');
+    startLoaderPhaseCycler('bio-loader-phase');
 
     try {
         const res  = await fetch('/api/scientist/analyze', {
@@ -421,12 +514,20 @@ async function runMatrixAnalysis() {
             body:    JSON.stringify(payload),
         });
         const data = await res.json();
+        stopLoaderPhaseCycler();
         lastAnalysis = data;
         renderMatrixResults(container, data);
     } catch (err) {
+        stopLoaderPhaseCycler();
         container.innerHTML = `
             <div class="empty-state">
-                <div class="empty-icon">⚠️</div>
+                <div class="empty-icon">
+                    <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="var(--rose)" stroke-width="1.8">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                </div>
                 <h3>Analysis Error</h3>
                 <p>${escapeHtml(err.message)}</p>
             </div>
@@ -664,7 +765,12 @@ function renderKBResults(chunks) {
     if (!chunks || chunks.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
-                <div class="empty-icon">📚</div>
+                <div class="empty-icon">
+                    <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="var(--text-muted)" stroke-width="1.8">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                </div>
                 <h3>No Matches Found</h3>
                 <p>Adjust your search query or domain filter to explore the scientific corpus.</p>
             </div>
