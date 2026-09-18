@@ -1,0 +1,77 @@
+[
+  {
+    "id": "SOIL-001",
+    "domain": "soil_health",
+    "topic": "Soil Organic Carbon and Microbial Dynamics in Semi-Arid Drylands",
+    "key_variables": ["soil_organic_carbon", "microbial_biomass_carbon", "soil_moisture", "bulk_density"],
+    "thresholds": {
+      "soc_depleted_pct": 0.5,
+      "soc_moderate_pct": 1.2,
+      "soc_optimal_pct": 2.5
+    },
+    "scientific_summary": "In semi-arid and arid agricultural zones, soil organic carbon (SOC) below 0.6% indicates severe biological exhaustion, resulting in collapsed aggregate stability, elevated bulk density (>1.45 g/cm³), and compromised mycorrhizal colonization. Increasing SOC by 0.2-0.4% per hectare improves soil available water capacity (AWC) by 1.5-2.2% volumetric water content.",
+    "interventions": [
+      {
+        "name": "Legume-Based Cover Cropping & Green Manuring",
+        "suitable_conditions": {"rainfall": "low_to_moderate", "soc": "< 1.0%", "land_use": "cropland"},
+        "mechanism": "Biological nitrogen fixation via Rhizobium symbiosis coupled with root exudate allocation promotes glomalin production and microbial aggregation.",
+        "quantitative_impact": {
+          "soc_increase_pct_yr": "0.12% - 0.28%",
+          "microbial_biomass_carbon_increase_pct": "25% - 40% over 3 years",
+          "water_retention_increase_mm_m": "12 - 18 mm per meter of soil profile"
+        },
+        "time_horizon": "medium-term (2-4 years)",
+        "confidence_level": 0.91,
+        "citations": [
+          "FAO (2021). Recarbonizing Global Soils: A Technical Manual of Recommended Management Practices. Vol 3: Cropland, Grassland, Integrated Systems. Rome.",
+          "Lal, R. (2020). Soil organic matter content and crop yield. Journal of Soil and Water Conservation, 75(2), 27A-32A."
+        ]
+      },
+      {
+        "name": "Biochar and Compost Co-Application",
+        "suitable_conditions": {"soc": "< 0.8%", "ph": "5.5 - 8.2", "land_use": "intensive_cropland"},
+        "mechanism": "Pyrolyzed biomass creates recalcitrant carbon scaffolds with high specific surface area (>250 m²/g), increasing cation exchange capacity (CEC) and protecting labile organic matter from mineralization.",
+        "quantitative_impact": {
+          "soc_increase_pct_yr": "0.35% - 0.60% immediate baseline elevation",
+          "nutrient_use_efficiency_gain": "18% - 30% reduction in nitrogen leaching",
+          "soil_ph_buffering": "Stabilizes rhizosphere pH towards 6.8 - 7.2"
+        },
+        "time_horizon": "short-term (1 season) to long-term (persist > 20 years)",
+        "confidence_level": 0.88,
+        "citations": [
+          "Lehmann, J., & Joseph, S. (2015). Biochar for Environmental Management: Science, Technology and Implementation. Routledge.",
+          "IPCC (2019). Climate Change and Land: Special Report on climate change, desertification, land degradation, sustainable land management. Ch. 4."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "SOIL-002",
+    "domain": "soil_health",
+    "topic": "Soil Acidity, Salinity, and Microbial Respiration",
+    "key_variables": ["ph", "electrical_conductivity", "exchangeable_sodium_percentage"],
+    "thresholds": {
+      "acidic_critical_ph": 5.2,
+      "alkaline_critical_ph": 8.5,
+      "saline_ec_ds_m": 4.0
+    },
+    "scientific_summary": "Soil pH deviations outside 6.0-7.5 drastically suppress bacterial nitrogenase activity and phosphate solubilization. High electrical conductivity (>4 dS/m) induces osmotic shock in soil microarthropods and earthworms, dropping epigeic faunal diversity by over 60%.",
+    "interventions": [
+      {
+        "name": "Halophytic and Deep-Rooting Perennial Forage Integration",
+        "suitable_conditions": {"salinity": "moderate_to_high", "ph": "> 8.0"},
+        "mechanism": "Phytoremediation using salt-accumulating chenopods and deep-rooted grasses lowers water tables, prevents capillary rise of saline groundwater, and deposits organic acids that lower rhizosphere alkalinity.",
+        "quantitative_impact": {
+          "root_zone_salinity_reduction_pct": "20% - 35% over 3 years",
+          "earthworm_recolonization_rate": "10 - 25 individuals/m² within 24 months"
+        },
+        "time_horizon": "medium-term (2-5 years)",
+        "confidence_level": 0.86,
+        "citations": [
+          "Qadir, M., et al. (2014). Economics of salt-induced land degradation and restoration. Natural Resources Forum, 38(4), 282-295.",
+          "FAO (2022). Global Status of Salt-Affected Soils. Food and Agriculture Organization of the United Nations."
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,70 @@
+[
+  {
+    "id": "LAND-001",
+    "domain": "land_cover",
+    "topic": "Agroforestry, Intercropping, and Structural Heterogeneity in Croplands",
+    "key_variables": ["land_use_type", "crop_diversity", "canopy_cover_pct", "habitat_patch_size"],
+    "scientific_summary": "Transitioning from monoculture cropping to multi-strata agroforestry and alley intercropping breaks extensive agricultural monocultures, moderates surface thermal extremes by 2-4°C, suppresses evapotranspiration, and restores multi-trophic functional guilds including beneficial carabid beetles and wild pollinators.",
+    "interventions": [
+      {
+        "name": "Alley Cropping and Perennial Nitrogen-Fixing Tree Belts",
+        "suitable_conditions": {"land_use": "monoculture_cropland", "climate": "semi_arid_or_subhumid"},
+        "mechanism": "Planting drought-hardy leguminous trees (e.g., Faidherbia albida, Acacia senegal, Leucaena) in hedgerow alleys spaced 8-12m apart enhances hydraulic lift during dry spells, produces perennial leaf litter mulch, and establishes aerial flight pathways for avifauna and hymenopterans.",
+        "quantitative_impact": {
+          "crop_yield_stability_gain": "15% - 25% under drought anomaly years",
+          "soil_organic_carbon_gain": "+0.25% - 0.40% over 5 years",
+          "wild_pollinator_richness_gain": "+40% - 65% species richness increase",
+          "wind_erosion_reduction": "50% - 70% decrease in topsoil particulate loss"
+        },
+        "time_horizon": "medium to long-term (3-7 years)",
+        "confidence_level": 0.94,
+        "citations": [
+          "IPCC (2022). Climate Change 2022: Impacts, Adaptation and Vulnerability. Contribution of Working Group II to the Sixth Assessment Report. Ch. 5: Food, Fibre, and Other Ecosystem Products.",
+          "Jose, S. (2009). Agroforestry for ecosystem services and environmental benefits: an overview. Agroforestry Systems, 76(1), 1-10.",
+          "FAO (2020). The State of the World's Forests 2020: Forests, biodiversity and people. Rome."
+        ]
+      },
+      {
+        "name": "Contour Vegetative Buffers and Perennial Flower Strips",
+        "suitable_conditions": {"slope_pct": "> 2%", "field_size_ha": "> 5 ha"},
+        "mechanism": "Planting native perennial graminoids and forbs along topographical contours traps sediment runoff, fosters overwintering microhabitats for parasitoid wasps, and bridges isolated patches of natural vegetation across fragmented agricultural matrices.",
+        "quantitative_impact": {
+          "sediment_runoff_reduction": "60% - 85%",
+          "beneficial_predator_density": "+80% increase in Syrphidae and Coccinellidae",
+          "habitat_connectivity_corridor_pct": "+35% landscape connectivity index"
+        },
+        "time_horizon": "short to medium-term (1-3 years)",
+        "confidence_level": 0.90,
+        "citations": [
+          "IPBES (2018). The IPBES assessment report on land degradation and restoration. Secretariat of the Intergovernmental Science-Policy Platform on Biodiversity and Ecosystem Services, Bonn.",
+          "Wratten, S. D., et al. (2012). Enhancing ecosystem services for biodiversity conservation and agriculture. Ecology Letters, 15(7), 785-797."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "LAND-002",
+    "domain": "land_cover",
+    "topic": "Silvopasture and Rotational Grazing in Degraded Rangelands",
+    "key_variables": ["grazing_intensity", "stocking_rate", "woody_plant_density", "bare_soil_pct"],
+    "scientific_summary": "Continuous unmanaged livestock grazing triggers soil compaction, preferential consumption of palatable endemic grasses, and shrub encroachment. Transitioning to rotational mob grazing with native silvopastoral tree islands restores soil infiltration rates by up to 300% and doubles songbird nesting densities.",
+    "interventions": [
+      {
+        "name": "Adaptive Multi-Paddock (AMP) Grazing with Native Tree Clusters",
+        "suitable_conditions": {"land_use": "pasture_or_rangeland", "degradation": "moderate_to_severe"},
+        "mechanism": "High stocking density for brief durations followed by extended recovery windows allows root biomass regeneration, stimulates deep carbon exudation, and prevents trampling of ground-nesting birds.",
+        "quantitative_impact": {
+          "water_infiltration_rate_gain": "120% - 250% increase",
+          "endemic_grass_richness_gain": "+30% - 50% recovery over 4 years",
+          "soil_bulk_density_reduction": "from 1.55 g/cm³ down to 1.30 g/cm³"
+        },
+        "time_horizon": "medium-term (2-5 years)",
+        "confidence_level": 0.89,
+        "citations": [
+          "Teague, R., et al. (2016). The role of ruminants in reducing agriculture's carbon footprint in North America. Journal of Soil and Water Conservation, 71(2), 156-164.",
+          "FAO (2021). Grassland and pasture assessment tools. Food and Agriculture Organization, Rome."
+        ]
+      }
+    ]
+  }
+]

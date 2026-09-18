@@ -1,0 +1,43 @@
+[
+  {
+    "id": "HUM-001",
+    "domain": "human_impact",
+    "topic": "Agricultural Chemical Runoff, Eutrophication, and Ecological Buffer Strips",
+    "key_variables": ["nitrogen_fertilizer_rate", "phosphorus_loading", "pesticide_intensity", "buffer_width_m"],
+    "scientific_summary": "Excess synthetic nitrogen (>120 kg N/ha) in combination with high solubility drives deep nitrate leaching into aquatic ecosystems and accelerates soil acidification via base cation depletion. Broad-spectrum organophosphate and neonicotinoid pesticides reduce non-target soil arthropod biomass by up to 55%.",
+    "interventions": [
+      {
+        "name": "Engineered Riparian Wetland Buffers and Denitrifying Bioreactors",
+        "suitable_conditions": {"synthetic_n_loading": "high", "proximity_to_watercourse": "< 100m"},
+        "mechanism": "Planting deep-rooted wetland macrophytes (Typha, Phragmites, Salix) creates anoxic root zones populated by denitrifying heterotrophic bacteria that convert dissolved NO3- into inert atmospheric N2 gas before reaching lotic waterways.",
+        "quantitative_impact": {
+          "nitrate_export_reduction": "70% - 92% removal from subsurface flow",
+          "sediment_bound_phosphorus_trapping": "80% - 95% retention within 10m buffer",
+          "amphibian_breeding_success_rate": "+65% in adjacent aquatic ecotones"
+        },
+        "time_horizon": "short to medium-term (1-3 years)",
+        "confidence_level": 0.94,
+        "citations": [
+          "Schipper, L. A., et al. (2010). Denitrifying bioreactors-an approach for reducing nitrate loads to receiving waters. Ecological Engineering, 36(11), 1532-1540.",
+          "EPA (2020). Riparian buffer width, vegetative cover, and nitrogen removal effectiveness: A review. US EPA Research Report."
+        ]
+      },
+      {
+        "name": "Integrated Pest and Pollinator Management (IPPM) with Beetle Banks",
+        "suitable_conditions": {"pesticide_use": "frequent", "crop_type": "cereals_or_oilseeds"},
+        "mechanism": "Replacing prophylactic chemical sprays with economic injury thresholds and planting raised berms (0.4m high, 1.5m wide) of tussock-forming grasses (e.g., Dactylis glomerata) establishes permanent overwintering refuges for polyphagous predatory Carabidae and Staphylinidae.",
+        "quantitative_impact": {
+          "chemical_insecticide_reduction": "60% - 100% reduction in foliar applications",
+          "natural_aphid_predation_rate": "+75% within 150m of beetle bank",
+          "beneficial_insect_biomass": "+120% increase across field interiors"
+        },
+        "time_horizon": "short-term (1-2 seasons)",
+        "confidence_level": 0.92,
+        "citations": [
+          "Holland, J. M., et al. (2016). Enhancing ecosystem services in farmland: what do beetle banks deliver? Applied Soil Ecology, 100, 102-113.",
+          "UNEP (2021). Environmental and Health Impacts of Pesticides and Fertilizers and Ways of Minimizing Them. United Nations Environment Programme, Nairobi."
+        ]
+      }
+    ]
+  }
+]

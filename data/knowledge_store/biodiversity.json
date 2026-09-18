@@ -1,0 +1,69 @@
+[
+  {
+    "id": "BIO-001",
+    "domain": "biodiversity_indicators",
+    "topic": "Pollinator Decline, Species Richness, and Trophic Network Stability",
+    "key_variables": ["species_richness", "shannon_index", "pollinator_abundance", "floral_continuity"],
+    "scientific_summary": "Agricultural intensification and landscape homogenization cause steep declines in Apoidea (wild bees), Syrphidae (hoverflies), and Lepidoptera. Loss of continuous floral resource availability creates seasonal starvation bottlenecks. Restoring polycultural flowering margins with asynchronous bloom phenology elevates wild pollinator species richness by 50-80% and increases fruit set in adjacent crops.",
+    "interventions": [
+      {
+        "name": "Asynchronous Phenological Floral Stepping Stones & Nesting Banks",
+        "suitable_conditions": {"pollinator_diversity": "depleted", "floral_deficit_period": "mid_summer_or_early_spring"},
+        "mechanism": "Planting a calibrated mix of native perennial forbs providing uninterrupted nectar and pollen across March-October, combined with untilled compacted sandy-loam bare earth banks, supports both cavity-nesting and ground-nesting solitary bee species (70% of wild bees).",
+        "quantitative_impact": {
+          "wild_bee_species_richness_gain": "+45% - 75% increase over 2 seasons",
+          "crop_pollination_efficiency": "+22% higher seed set in entomophilous crops",
+          "shannon_diversity_index_h": "Increases from 1.1 to 2.4"
+        },
+        "time_horizon": "short-term (1-2 years)",
+        "confidence_level": 0.95,
+        "citations": [
+          "IPBES (2016). Assessment report on pollinators, pollination and food production. Secretariat of the Intergovernmental Science-Policy Platform on Biodiversity and Ecosystem Services, Bonn.",
+          "Garibaldi, L. A., et al. (2016). Mutually beneficial pollinator diversity and crop yield in small and large farms. Science, 351(6271), 388-391.",
+          "Dicks, L. V., et al. (2021). A global database of pollinator biodiversity management interventions. Nature Conservation, 44, 45-62."
+        ]
+      },
+      {
+        "name": "Rewilding Hedgerow Corridors and Deadwood Microhabitats",
+        "suitable_conditions": {"habitat_fragmentation": "high", "deadwood_volume_m3_ha": "< 2 m³"},
+        "mechanism": "Installing coarse woody debris (logs >20cm diameter) and thorny native hedgerows (e.g., Crataegus, Prunus spinosa) provides saproxylic beetle habitats, fungal sporocarp substrates, and protective predator refugia against avian raptors.",
+        "quantitative_impact": {
+          "saproxylic_insect_diversity": "+60% - 110% within 3 years",
+          "insectivorous_bird_territory_density": "+35% increase in breeding pairs",
+          "small_mammal_corridor_usage": "+50% dispersal across farm boundaries"
+        },
+        "time_horizon": "medium to long-term (2-6 years)",
+        "confidence_level": 0.92,
+        "citations": [
+          "Seibold, S., et al. (2019). Arthropod decline in grasslands and forests is associated with landscape-level drivers. Nature, 574(7780), 671-674.",
+          "IUCN (2020). Guidelines for conserving saproxylic biodiversity and microhabitats. IUCN Species Survival Commission."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "BIO-002",
+    "domain": "biodiversity_indicators",
+    "topic": "Soil Macrofauna and Earthworm Density as Primary Ecological Engineers",
+    "key_variables": ["earthworm_abundance_m2", "soil_microarthropods", "arbuscular_mycorrhizal_colonization"],
+    "scientific_summary": "Intensive inversion tillage reduces anecic earthworm (e.g. Lumbricus terrestris) populations by 70-90% by destroying permanent vertical burrows and exposing worms to desiccation and predation. Loss of anecic worms degrades deep macropore networks, restricting water infiltration and root exploration in subsoils.",
+    "interventions": [
+      {
+        "name": "Conservation Minimum-Tillage with High Surface Residue Retention",
+        "suitable_conditions": {"tillage_intensity": "inversion_plowing", "earthworm_density": "< 50/m²"},
+        "mechanism": "Cessation of deep inversion plowing and retention of >30% organic crop residues preserves vertical macropores, moderates topsoil temperature, and provides a continuous cellulose/lignin food supply for soil detritivores.",
+        "quantitative_impact": {
+          "earthworm_population_recovery": "+150% - 300% within 3-4 years (reaching >180 individuals/m²)",
+          "soil_macroporosity_increase": "25% - 40% enhancement in pore continuity",
+          "water_infiltration_capacity": "3x to 5x increase during high-intensity rainfall"
+        },
+        "time_horizon": "medium-term (3-5 years)",
+        "confidence_level": 0.93,
+        "citations": [
+          "FAO (2020). State of knowledge of soil biodiversity - Status, challenges and potentialities. FAO, ITPS, GSBI, CBD. Rome.",
+          "Briones, M. J. I., & Schmidt, O. (2017). Conventional tillage decreases the abundance and biomass of earthworms: A meta-analysis. Global Change Biology, 23(10), 4396-4419."
+        ]
+      }
+    ]
+  }
+]
