@@ -165,6 +165,25 @@ function initBiodiversityDoodleCanvas() {
         mouseY = -9999;
     });
 
+    // Track card hovering to decrease background doodle color intensity by 20%
+    let isCardHovered = false;
+    const streamContainer = document.getElementById('intake-stream');
+    if (streamContainer) {
+        streamContainer.addEventListener('mouseover', (e) => {
+            if (e.target.closest('.assessment-card') || e.target.closest('.welcome-card')) {
+                isCardHovered = true;
+                wrap.classList.add('card-hovered');
+            }
+        });
+        streamContainer.addEventListener('mouseout', (e) => {
+            const rel = e.relatedTarget;
+            if (!rel || (!rel.closest?.('.assessment-card') && !rel.closest?.('.welcome-card'))) {
+                isCardHovered = false;
+                wrap.classList.remove('card-hovered');
+            }
+        });
+    }
+
     wrap.addEventListener('click', (e) => {
         const rect = wrap.getBoundingClientRect();
         const cx = e.clientX - rect.left;
@@ -392,7 +411,8 @@ function initBiodiversityDoodleCanvas() {
             ctx.save();
             ctx.beginPath();
             ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
-            ctx.strokeStyle = `hsla(${sw.colorHue}, 85%, 45%, ${sw.alpha * 0.35})`;
+            const swDim = isCardHovered ? 0.80 : 1.0;
+            ctx.strokeStyle = `hsla(${sw.colorHue}, ${Math.round(85 * 0.80 * swDim)}%, 45%, ${sw.alpha * 0.35 * swDim})`;
             ctx.lineWidth = 2.5;
             ctx.stroke();
             ctx.restore();
@@ -490,23 +510,26 @@ function initBiodiversityDoodleCanvas() {
             ctx.scale(scale, scale);
 
             // Color Interpolation (subtle earth watermark -> vivid biological spectrum)
+            const cardDimFactor = isCardHovered ? 0.80 : 1.0;
             if (item.activation > 0.01) {
-                // Vibrant dynamic cycling color on hover
+                // Vibrant dynamic cycling color on hover with calibrated 20% decreased intensity (80% saturation factor)
                 const dynamicHue = (item.baseHue + time * 0.08 + item.activation * 50) % 360;
-                const sat = Math.round(75 + item.activation * 20);
-                const light = Math.round(38 + Math.sin(time * 0.006 + item.pulsePhase) * 8);
-                const alpha = 0.25 + item.activation * 0.70;
+                // Decrease saturation/intensity by 20% (0.80 factor) on hover
+                const sat = Math.round((75 + item.activation * 20) * 0.80 * cardDimFactor);
+                const light = Math.round((38 + Math.sin(time * 0.006 + item.pulsePhase) * 8) * (isCardHovered ? 0.95 : 1.0));
+                const alpha = (0.25 + item.activation * 0.70) * cardDimFactor;
 
                 ctx.strokeStyle = `hsla(${dynamicHue}, ${sat}%, ${light}%, ${alpha})`;
                 ctx.fillStyle   = `hsla(${dynamicHue}, ${sat}%, ${light}%, ${alpha * 0.8})`;
                 ctx.lineWidth   = 1.5 + item.activation * 1.5;
-                ctx.shadowColor = `hsla(${dynamicHue}, ${sat}%, 50%, ${item.activation * 0.85})`;
-                ctx.shadowBlur  = 16 * item.activation;
+                ctx.shadowColor = `hsla(${dynamicHue}, ${sat}%, 50%, ${item.activation * 0.85 * cardDimFactor})`;
+                ctx.shadowBlur  = 16 * item.activation * cardDimFactor;
             } else {
                 // Resting WhatsApp-style doodle wallpaper (subtle loam & botanical watermark)
+                const restAlpha = (item.type % 2 === 0 ? 0.18 : 0.16) * cardDimFactor;
                 ctx.strokeStyle = (item.type % 2 === 0)
-                    ? 'rgba(37, 112, 50, 0.18)'   // botanical foliage green tint
-                    : 'rgba(115, 80, 50, 0.16)';  // warm soil loam brown tint
+                    ? `rgba(37, 112, 50, ${restAlpha})`   // botanical foliage green tint
+                    : `rgba(115, 80, 50, ${restAlpha})`;  // warm soil loam brown tint
                 ctx.fillStyle   = ctx.strokeStyle;
                 ctx.lineWidth   = 1.4;
                 ctx.shadowBlur  = 0;
@@ -528,12 +551,13 @@ function initBiodiversityDoodleCanvas() {
                 continue;
             }
 
+            const cardDimFactor = isCardHovered ? 0.80 : 1.0;
             ctx.save();
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${p.colorHue}, 90%, 55%, ${p.life * 0.75})`;
-            ctx.shadowColor = `hsla(${p.colorHue}, 90%, 55%, 0.8)`;
-            ctx.shadowBlur = 8;
+            ctx.fillStyle = `hsla(${p.colorHue}, ${Math.round(90 * 0.80 * cardDimFactor)}%, 55%, ${p.life * 0.75 * cardDimFactor})`;
+            ctx.shadowColor = `hsla(${p.colorHue}, ${Math.round(90 * 0.80 * cardDimFactor)}%, 55%, ${0.8 * cardDimFactor})`;
+            ctx.shadowBlur = 8 * cardDimFactor;
             ctx.fill();
             ctx.restore();
         }
