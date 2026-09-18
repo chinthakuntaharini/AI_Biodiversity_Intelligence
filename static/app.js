@@ -595,11 +595,11 @@ function renderSpatialResult(data, lat, lon) {
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-            <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:12px;">
+            <div style="background:var(--bg-base);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:12px;">
                 <strong style="font-size:0.72rem;color:var(--amber);text-transform:uppercase;letter-spacing:0.07em;display:block;margin-bottom:6px;">Primary Ecological Threats</strong>
                 <ul style="padding-left:18px;font-size:0.78rem;color:var(--text-secondary);line-height:1.6;">${threats}</ul>
             </div>
-            <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:12px;">
+            <div style="background:var(--bg-base);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:12px;">
                 <strong style="font-size:0.72rem;color:var(--green);text-transform:uppercase;letter-spacing:0.07em;display:block;margin-bottom:6px;">Recommended Native Taxa</strong>
                 <ul style="padding-left:18px;font-size:0.78rem;color:var(--text-secondary);line-height:1.6;">${taxa}</ul>
             </div>
