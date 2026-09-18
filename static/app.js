@@ -21,6 +21,7 @@ let sessionAccumulatedState = {};
 // ──────────────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     initUniversePortal();
+    initBiodiversityDoodleCanvas();
     updateSessionDisplay();
     loadCorpusStats();
     resolveSpatial();         // pre-load default spatial result
@@ -68,6 +69,481 @@ function dismissUniversePortal() {
     setTimeout(() => {
         portal.style.display = 'none';
     }, 850);
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+// Biodiversity Elemental Doodle Canvas (WhatsApp-style Interactive Wallpaper)
+// ──────────────────────────────────────────────────────────────────────────────
+function initBiodiversityDoodleCanvas() {
+    const canvas = document.getElementById('biodiversity-doodle-canvas');
+    const wrap   = document.querySelector('.intake-stream-wrap');
+    if (!canvas || !wrap) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let width  = 0;
+    let height = 0;
+    let dpr    = window.devicePixelRatio || 1;
+    let items  = [];
+    const shockwaves = [];
+    const spores = [];
+
+    let mouseX = -9999;
+    let mouseY = -9999;
+    let mouseActive = false;
+
+    function resize() {
+        const rect = wrap.getBoundingClientRect();
+        width  = Math.max(300, rect.width || 800);
+        height = Math.max(300, rect.height || 600);
+        dpr = window.devicePixelRatio || 1;
+        canvas.width  = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(dpr, dpr);
+        generateDoodles();
+    }
+
+    window.resizeBiodiversityCanvas = resize;
+    window.addEventListener('resize', resize);
+
+    function generateDoodles() {
+        items = [];
+        const colSpacing = 110;
+        const rowSpacing = 96;
+        const cols = Math.ceil(width / colSpacing) + 1;
+        const rows = Math.ceil(height / rowSpacing) + 1;
+
+        let seed = 0;
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                const offsetX = (r % 2 === 1) ? colSpacing * 0.5 : 0;
+                const jitterX = Math.sin(seed * 7.3) * 16;
+                const jitterY = Math.cos(seed * 5.7) * 16;
+                const homeX   = c * colSpacing + offsetX + jitterX;
+                const homeY   = r * rowSpacing + jitterY;
+
+                const type = seed % 12;
+                const baseHues = [142, 28, 198, 130, 275, 105, 260, 44, 15, 34, 22, 175];
+                const baseHue  = baseHues[type];
+
+                items.push({
+                    x: homeX,
+                    y: homeY,
+                    homeX: homeX,
+                    homeY: homeY,
+                    vx: 0,
+                    vy: 0,
+                    type: type,
+                    baseSize: 18 + (seed % 6),
+                    angle: (seed % 10) * 0.1 - 0.45,
+                    rotSpeed: (seed % 2 === 0 ? 1 : -1) * (0.002 + (seed % 5) * 0.001),
+                    driftPhase: (seed * 1.3) % (Math.PI * 2),
+                    driftSpeed: 0.0012 + (seed % 4) * 0.0006,
+                    driftRadius: 5 + (seed % 6),
+                    activation: 0,
+                    baseHue: baseHue,
+                    pulsePhase: (seed * 2.1) % (Math.PI * 2),
+                });
+                seed++;
+            }
+        }
+    }
+
+    // Mouse Tracking across chat stream wrap
+    wrap.addEventListener('mousemove', (e) => {
+        const rect = wrap.getBoundingClientRect();
+        mouseX = e.clientX - rect.left;
+        mouseY = e.clientY - rect.top;
+        mouseActive = true;
+    });
+
+    wrap.addEventListener('mouseleave', () => {
+        mouseActive = false;
+        mouseX = -9999;
+        mouseY = -9999;
+    });
+
+    wrap.addEventListener('click', (e) => {
+        const rect = wrap.getBoundingClientRect();
+        const cx = e.clientX - rect.left;
+        const cy = e.clientY - rect.top;
+        shockwaves.push({
+            x: cx,
+            y: cy,
+            radius: 5,
+            maxRadius: 260,
+            strength: 28,
+            speed: 7,
+            alpha: 1.0,
+            colorHue: Math.floor(Math.random() * 360),
+        });
+    });
+
+    // Procedural Vector Drawings (WhatsApp Doodle style without emojis)
+    function renderDoodleShape(type, size) {
+        switch (type) {
+            case 0: // Botanical Leaf
+                ctx.beginPath();
+                ctx.moveTo(0, -size);
+                ctx.bezierCurveTo(size * 0.7, -size * 0.5, size * 0.7, size * 0.5, 0, size);
+                ctx.bezierCurveTo(-size * 0.7, size * 0.5, -size * 0.7, -size * 0.5, 0, -size);
+                ctx.stroke();
+                // Stem & veins
+                ctx.beginPath();
+                ctx.moveTo(0, -size * 0.85); ctx.lineTo(0, size * 0.95);
+                ctx.moveTo(0, -size * 0.4); ctx.lineTo(size * 0.35, -size * 0.15);
+                ctx.moveTo(0, -size * 0.4); ctx.lineTo(-size * 0.35, -size * 0.15);
+                ctx.moveTo(0, size * 0.1);  ctx.lineTo(size * 0.35, size * 0.35);
+                ctx.moveTo(0, size * 0.1);  ctx.lineTo(-size * 0.35, size * 0.35);
+                ctx.stroke();
+                break;
+
+            case 1: // Carbon Hexagon / Benzene Aromatic Ring
+                ctx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    const a = (i * Math.PI) / 3;
+                    const hx = Math.cos(a) * size * 0.82;
+                    const hy = Math.sin(a) * size * 0.82;
+                    if (i === 0) ctx.moveTo(hx, hy);
+                    else ctx.lineTo(hx, hy);
+                }
+                ctx.closePath();
+                ctx.stroke();
+                // Inner resonance circle
+                ctx.beginPath();
+                ctx.arc(0, 0, size * 0.45, 0, Math.PI * 2);
+                ctx.stroke();
+                // Vertex nodes
+                for (let i = 0; i < 6; i++) {
+                    const a = (i * Math.PI) / 3;
+                    ctx.beginPath();
+                    ctx.arc(Math.cos(a) * size * 0.82, Math.sin(a) * size * 0.82, 2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                break;
+
+            case 2: // Hydrology Water Droplet
+                ctx.beginPath();
+                ctx.moveTo(0, -size);
+                ctx.bezierCurveTo(size * 0.75, 0, size * 0.75, size * 0.75, 0, size * 0.75);
+                ctx.bezierCurveTo(-size * 0.75, size * 0.75, -size * 0.75, 0, 0, -size);
+                ctx.closePath();
+                ctx.stroke();
+                // Inner droplet ripple
+                ctx.beginPath();
+                ctx.arc(-size * 0.2, size * 0.2, size * 0.22, Math.PI * 0.6, Math.PI * 1.5);
+                ctx.stroke();
+                break;
+
+            case 3: // Tree / Forest Canopy
+                // Trunk
+                ctx.beginPath();
+                ctx.moveTo(0, size * 0.25); ctx.lineTo(0, size * 0.9);
+                ctx.moveTo(-size * 0.2, size * 0.9); ctx.lineTo(size * 0.2, size * 0.9);
+                ctx.stroke();
+                // Lobes
+                ctx.beginPath();
+                ctx.arc(0, -size * 0.25, size * 0.5, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(-size * 0.35, 0, size * 0.35, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(size * 0.35, 0, size * 0.35, 0, Math.PI * 2);
+                ctx.stroke();
+                break;
+
+            case 4: // Mycelium / Rhizosphere Fungal Network
+                ctx.beginPath();
+                ctx.moveTo(0, 0); ctx.quadraticCurveTo(size * 0.3, -size * 0.3, size * 0.8, -size * 0.7);
+                ctx.moveTo(0, 0); ctx.quadraticCurveTo(-size * 0.4, -size * 0.2, -size * 0.7, -size * 0.6);
+                ctx.moveTo(0, 0); ctx.quadraticCurveTo(size * 0.4, size * 0.3, size * 0.75, size * 0.7);
+                ctx.moveTo(0, 0); ctx.quadraticCurveTo(-size * 0.3, size * 0.4, -size * 0.6, size * 0.8);
+                // Secondary branching
+                ctx.moveTo(size * 0.4, -size * 0.35); ctx.lineTo(size * 0.65, -size * 0.15);
+                ctx.moveTo(-size * 0.35, size * 0.4); ctx.lineTo(-size * 0.55, size * 0.2);
+                ctx.stroke();
+                break;
+
+            case 5: // Sprouting Seed Embryo
+                ctx.beginPath();
+                ctx.ellipse(0, size * 0.3, size * 0.42, size * 0.28, Math.PI * 0.15, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, size * 0.1);
+                ctx.quadraticCurveTo(-size * 0.2, -size * 0.3, 0, -size * 0.7);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(-size * 0.22, -size * 0.7, size * 0.18, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(size * 0.22, -size * 0.7, size * 0.18, 0, Math.PI * 2);
+                ctx.stroke();
+                break;
+
+            case 6: // DNA Helix Rung
+                ctx.beginPath();
+                ctx.moveTo(-size * 0.6, -size * 0.75);
+                ctx.bezierCurveTo(size * 0.7, -size * 0.25, -size * 0.7, size * 0.25, size * 0.6, size * 0.75);
+                ctx.moveTo(size * 0.6, -size * 0.75);
+                ctx.bezierCurveTo(-size * 0.7, -size * 0.25, size * 0.7, size * 0.25, -size * 0.6, size * 0.75);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(-size * 0.4, -size * 0.4); ctx.lineTo(size * 0.4, -size * 0.4);
+                ctx.moveTo(-size * 0.15, 0); ctx.lineTo(size * 0.15, 0);
+                ctx.moveTo(-size * 0.4, size * 0.4); ctx.lineTo(size * 0.4, size * 0.4);
+                ctx.stroke();
+                break;
+
+            case 7: // Solar Photosynthesis Sun
+                ctx.beginPath();
+                ctx.arc(0, 0, size * 0.35, 0, Math.PI * 2);
+                ctx.stroke();
+                for (let i = 0; i < 8; i++) {
+                    const a = (i * Math.PI) / 4;
+                    const len = (i % 2 === 0) ? size * 0.85 : size * 0.62;
+                    ctx.beginPath();
+                    ctx.moveTo(Math.cos(a) * size * 0.44, Math.sin(a) * size * 0.44);
+                    ctx.lineTo(Math.cos(a) * len, Math.sin(a) * len);
+                    ctx.stroke();
+                }
+                break;
+
+            case 8: // Pollinator Butterfly
+                ctx.beginPath();
+                ctx.moveTo(0, -size * 0.7); ctx.lineTo(0, size * 0.7);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.bezierCurveTo(-size * 0.85, -size * 0.9, -size * 0.9, -size * 0.1, 0, 0);
+                ctx.bezierCurveTo(-size * 0.75, size * 0.2, -size * 0.6, size * 0.7, 0, size * 0.5);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.bezierCurveTo(size * 0.85, -size * 0.9, size * 0.9, -size * 0.1, 0, 0);
+                ctx.bezierCurveTo(size * 0.75, size * 0.2, size * 0.6, size * 0.7, 0, size * 0.5);
+                ctx.stroke();
+                break;
+
+            case 9: // Soil Horizons & Strata
+                for (let i = -1; i <= 1; i++) {
+                    const yOff = i * size * 0.35;
+                    ctx.beginPath();
+                    ctx.moveTo(-size * 0.75, yOff);
+                    ctx.bezierCurveTo(-size * 0.3, yOff - size * 0.2, size * 0.3, yOff + size * 0.2, size * 0.75, yOff);
+                    ctx.stroke();
+                }
+                ctx.beginPath();
+                ctx.arc(-size * 0.3, -size * 0.05, 1.5, 0, Math.PI * 2);
+                ctx.arc(size * 0.25, size * 0.18, 1.5, 0, Math.PI * 2);
+                ctx.arc(-size * 0.1, size * 0.5, 1.5, 0, Math.PI * 2);
+                ctx.fill();
+                break;
+
+            case 10: // Carbon Dioxide CO2 Molecule
+                ctx.beginPath();
+                ctx.arc(0, 0, size * 0.3, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(-size * 0.65, 0, size * 0.22, 0, Math.PI * 2);
+                ctx.arc(size * 0.65, 0, size * 0.22, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(-size * 0.42, -2.5); ctx.lineTo(-size * 0.2, -2.5);
+                ctx.moveTo(-size * 0.42, 2.5);  ctx.lineTo(-size * 0.2, 2.5);
+                ctx.moveTo(size * 0.2, -2.5);   ctx.lineTo(size * 0.42, -2.5);
+                ctx.moveTo(size * 0.2, 2.5);    ctx.lineTo(size * 0.42, 2.5);
+                ctx.stroke();
+                break;
+
+            case 11: // Diatom Microorganism
+                ctx.beginPath();
+                ctx.arc(0, 0, size * 0.6, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(0, 0, size * 0.24, 0, Math.PI * 2);
+                ctx.stroke();
+                for (let i = 0; i < 6; i++) {
+                    const a = (i * Math.PI) / 3;
+                    ctx.beginPath();
+                    ctx.moveTo(Math.cos(a) * size * 0.24, Math.sin(a) * size * 0.24);
+                    ctx.lineTo(Math.cos(a) * size * 0.6, Math.sin(a) * size * 0.6);
+                    ctx.stroke();
+                }
+                break;
+        }
+    }
+
+    // Animation Loop
+    let lastTime = performance.now();
+
+    function renderLoop(time) {
+        const dt = Math.min((time - lastTime) / 1000, 0.1);
+        lastTime = time;
+
+        ctx.clearRect(0, 0, width, height);
+
+        // Update shockwaves
+        for (let i = shockwaves.length - 1; i >= 0; i--) {
+            const sw = shockwaves[i];
+            sw.radius += sw.speed;
+            sw.alpha = Math.max(0, 1.0 - sw.radius / sw.maxRadius);
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+            ctx.strokeStyle = `hsla(${sw.colorHue}, 85%, 45%, ${sw.alpha * 0.35})`;
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+            ctx.restore();
+
+            if (sw.radius >= sw.maxRadius) {
+                shockwaves.splice(i, 1);
+            }
+        }
+
+        // Update & Render Doodles
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+
+            // Idle drift
+            const driftX = Math.sin(time * item.driftSpeed + item.driftPhase) * item.driftRadius;
+            const driftY = Math.cos(time * item.driftSpeed + item.driftPhase) * item.driftRadius;
+            let targetX = item.homeX + driftX;
+            let targetY = item.homeY + driftY;
+
+            // Cursor interaction (Repel & Attraction Swirl)
+            if (mouseActive) {
+                const dx = item.x - mouseX;
+                const dy = item.y - mouseY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < 95) {
+                    // Repel zone: elements are pushed away by the cursor
+                    const angle = Math.atan2(dy, dx);
+                    const force = (1 - dist / 95) * 55;
+                    targetX = item.homeX + Math.cos(angle) * force;
+                    targetY = item.homeY + Math.sin(angle) * force;
+                    item.activation = Math.min(1.0, item.activation + dt * 5.5);
+
+                    // Emit spore particles if strongly activated
+                    if (item.activation > 0.6 && Math.random() < 0.12 && spores.length < 80) {
+                        spores.push({
+                            x: item.x + (Math.random() - 0.5) * 16,
+                            y: item.y + (Math.random() - 0.5) * 16,
+                            vx: (Math.random() - 0.5) * 1.5,
+                            vy: -0.8 - Math.random() * 1.2,
+                            size: 2 + Math.random() * 2.5,
+                            life: 1.0,
+                            decay: 0.02 + Math.random() * 0.02,
+                            colorHue: (item.baseHue + time * 0.05) % 360,
+                        });
+                    }
+                } else if (dist < 165) {
+                    // Attract & swirl zone around perimeter
+                    const angle = Math.atan2(dy, dx);
+                    const swirl = (1 - (dist - 95) / 70) * 16;
+                    targetX = item.homeX + Math.cos(angle + Math.PI / 2) * swirl;
+                    targetY = item.homeY + Math.sin(angle + Math.PI / 2) * swirl;
+                    item.activation = Math.min(0.65, item.activation + dt * 2.5);
+                } else {
+                    item.activation = Math.max(0, item.activation - dt * 2.2);
+                }
+            } else {
+                item.activation = Math.max(0, item.activation - dt * 2.0);
+            }
+
+            // Shockwave interaction
+            for (let s = 0; s < shockwaves.length; s++) {
+                const sw = shockwaves[s];
+                const sdx = item.x - sw.x;
+                const sdy = item.y - sw.y;
+                const sdist = Math.sqrt(sdx * sdx + sdy * sdy);
+                const diff = Math.abs(sdist - sw.radius);
+                if (diff < 35) {
+                    const angle = Math.atan2(sdy, sdx);
+                    const push = (1 - diff / 35) * sw.strength * sw.alpha;
+                    item.vx += Math.cos(angle) * push * 0.2;
+                    item.vy += Math.sin(angle) * push * 0.2;
+                    item.activation = Math.min(1.0, item.activation + 0.5);
+                }
+            }
+
+            // Spring physics integration
+            const ax = (targetX - item.x) * 0.065;
+            const ay = (targetY - item.y) * 0.065;
+            item.vx = (item.vx + ax) * 0.82;
+            item.vy = (item.vy + ay) * 0.82;
+            item.x += item.vx;
+            item.y += item.vy;
+
+            // Rotation
+            item.angle += item.rotSpeed * (1.0 + item.activation * 2.5);
+
+            // Dynamic Styling
+            ctx.save();
+            ctx.translate(item.x, item.y);
+            ctx.rotate(item.angle);
+
+            // Scale & Bounce
+            const scale = 1.0 + item.activation * 0.65;
+            ctx.scale(scale, scale);
+
+            // Color Interpolation (subtle earth watermark -> vivid biological spectrum)
+            if (item.activation > 0.01) {
+                // Vibrant dynamic cycling color on hover
+                const dynamicHue = (item.baseHue + time * 0.08 + item.activation * 50) % 360;
+                const sat = Math.round(75 + item.activation * 20);
+                const light = Math.round(38 + Math.sin(time * 0.006 + item.pulsePhase) * 8);
+                const alpha = 0.25 + item.activation * 0.70;
+
+                ctx.strokeStyle = `hsla(${dynamicHue}, ${sat}%, ${light}%, ${alpha})`;
+                ctx.fillStyle   = `hsla(${dynamicHue}, ${sat}%, ${light}%, ${alpha * 0.8})`;
+                ctx.lineWidth   = 1.5 + item.activation * 1.5;
+                ctx.shadowColor = `hsla(${dynamicHue}, ${sat}%, 50%, ${item.activation * 0.85})`;
+                ctx.shadowBlur  = 16 * item.activation;
+            } else {
+                // Resting WhatsApp-style doodle wallpaper (subtle loam & botanical watermark)
+                ctx.strokeStyle = (item.type % 2 === 0)
+                    ? 'rgba(37, 112, 50, 0.18)'   // botanical foliage green tint
+                    : 'rgba(115, 80, 50, 0.16)';  // warm soil loam brown tint
+                ctx.fillStyle   = ctx.strokeStyle;
+                ctx.lineWidth   = 1.4;
+                ctx.shadowBlur  = 0;
+            }
+
+            renderDoodleShape(item.type, item.baseSize);
+            ctx.restore();
+        }
+
+        // Render Spore Particles
+        for (let i = spores.length - 1; i >= 0; i--) {
+            const p = spores[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.life -= p.decay;
+
+            if (p.life <= 0) {
+                spores.splice(i, 1);
+                continue;
+            }
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${p.colorHue}, 90%, 55%, ${p.life * 0.75})`;
+            ctx.shadowColor = `hsla(${p.colorHue}, 90%, 55%, 0.8)`;
+            ctx.shadowBlur = 8;
+            ctx.fill();
+            ctx.restore();
+        }
+
+        requestAnimationFrame(renderLoop);
+    }
+
+    // Initialize layout & loop
+    resize();
+    requestAnimationFrame(renderLoop);
 }
 
 // ──────────────────────────────────────────────────────────────────────────────
