@@ -135,8 +135,8 @@ The platform functions as an **AI Environmental Scientist**, evaluating real-wor
 
 ### Step 1: Clone Repository
 ```bash
-git clone https://github.com/your-username/darukaa-earth-biointelligence.git
-cd "darukaa-earth-biointelligence"
+git clone https://github.com/chinthakuntaharini/AI_Biodiversity_Intelligence.git
+cd "AI_Biodiversity_Intelligence"
 ```
 
 ### Step 2: Create & Activate Virtual Environment
