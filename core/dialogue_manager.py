@@ -119,7 +119,7 @@ class ScientificSessionManager:
 
         # ── Soil Organic Carbon ──────────────────────────────────────────────
         soc_match = re.search(
-            r'(?:soil\s+organic\s+carbon|soc)\s*[:=]?\s*([0-9]*\.?[0-9]+)\s*%?',
+            r'(?:soil\s+organic\s+carbon|soc)(?:\s+is|\s+at|\s*[:=])?\s*([0-9]*\.?[0-9]+)\s*%?',
             lower
         )
         if soc_match:
@@ -153,32 +153,32 @@ class ScientificSessionManager:
 
         # ── Crop / Vegetation ────────────────────────────────────────────────
         crop_match = re.search(
-            r'(?:crop|growing|cultivating|land\s+under)\s*[:=]?\s*([a-z\s]+?)(?:,|\.|$|\n)', lower
+            r'(?:crop|growing|cultivating|grow|land\s+under)\s*(?:is\s*|[:=]\s*)?([a-z\s]+?)(?:,|\.|$|\n)', lower
         )
         if crop_match:
             crop_val = crop_match.group(1).strip()
-            if len(crop_val) > 1:
+            if len(crop_val) > 1 and crop_val not in ("monoculture", "crops", "plants"):
                 extracted["crop"] = crop_val
 
-        # Specific crop keywords
+        # Specific crop keywords (check specific crop names before generic monoculture)
         if "monoculture wheat" in lower or "wheat monoculture" in lower:
             extracted["crop"] = "monoculture wheat"
-        elif "wheat" in lower and "monoculture" not in lower:
+        elif "pearl millet" in lower or "bajra" in lower:
+            extracted["crop"] = "monoculture pearl millet" if "monoculture" in lower else "pearl millet"
+        elif "wheat" in lower:
             extracted["crop"] = "wheat"
-        elif "monoculture" in lower:
-            extracted["land_use"] = "monoculture"
         elif any(kw in lower for kw in ("corn", "maize")):
-            extracted["crop"] = "monoculture maize"
-        elif "soybean" in lower or "soy" in lower:
-            extracted["crop"] = "soybean monoculture"
+            extracted["crop"] = "monoculture maize" if "monoculture" in lower else "maize"
         elif "cotton" in lower:
-            extracted["crop"] = "cotton"
+            extracted["crop"] = "monoculture cotton" if "monoculture" in lower else "cotton"
+        elif "soybean" in lower or "soy" in lower:
+            extracted["crop"] = "monoculture soybean" if "monoculture" in lower else "soybean"
         elif any(kw in lower for kw in ("pasture", "rangeland", "grassland")):
             extracted["crop"] = "pasture/rangeland"
-        elif "pearl millet" in lower or "bajra" in lower:
-            extracted["crop"] = "pearl millet"
         elif any(kw in lower for kw in ("overgraz", "degraded pasture", "bare land", "bare soil")):
             extracted["land_use"] = "degraded / overgrazed rangeland"
+        elif "monoculture" in lower:
+            extracted["land_use"] = "monoculture"
 
         # ── Region / Climate Zone ────────────────────────────────────────────
         region_match = re.search(
@@ -254,9 +254,19 @@ class ScientificSessionManager:
                 pass
 
         # ── Geo-Coordinates ──────────────────────────────────────────────────
+        # Match explicit coordinate prefixes or degree formats, avoiding accidental single numbers
         coord_match = re.search(
-            r'([-+]?\d{1,2}\.?\d*)[,\s°N]*\s*([-+]?\d{1,3}\.?\d*)\s*°?[EW]?', text
+            r'(?:lat(?:itude)?\s*[:=]?\s*|coords?(?:inates?)?\s*[:=]?\s*|location\s*[:=]?\s*)'
+            r'([-+]?\d{1,2}(?:\.\d+)?)[,\s]+'
+            r'(?:lon(?:gitude)?\s*[:=]?\s*)?'
+            r'([-+]?\d{1,3}(?:\.\d+)?)',
+            lower
         )
+        if not coord_match:
+            coord_match = re.search(
+                r'([-+]?\d{1,2}\.\d+)[°\s]*[NS]?\s*,\s*([-+]?\d{1,3}\.\d+)[°\s]*[EW]?',
+                text
+            )
         if coord_match:
             try:
                 lat = float(coord_match.group(1))
